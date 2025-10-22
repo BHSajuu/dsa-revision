@@ -47,7 +47,7 @@ export default function ProblemTable({ patternId, problems, onAddProblem, onUpda
               <td colSpan="7" className="px-4 py-4">
                 <button
                   onClick={() => setIsAdding(true)}
-                  className="w-full py-3 border-2 border-dashed border-zinc-800 rounded-lg text-zinc-400 hover:border-blue-500 hover:text-blue-400 transition-all flex items-center justify-center gap-2 group"
+                  className="w-full py-3 border-2 border-dashed border-zinc-800 rounded-4xl text-zinc-400 hover:border-blue-500 hover:text-blue-400 transition-all flex items-center justify-center gap-2 group"
                 >
                   <svg className="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

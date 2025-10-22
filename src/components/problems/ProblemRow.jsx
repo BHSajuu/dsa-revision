@@ -9,6 +9,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
     leetcodeLink: problem.leetcodeLink,
     lastSolvedDate: problem.lastSolvedDate || "",
     nextReviewDate: problem.nextReviewDate || "",
+    successfulReviews: problem.successfulReviews || 0,
   });
 
   const handleSave = async () => {
@@ -34,7 +35,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
   };
 
   const calculateNextReview = (reviews) => {
-    const intervals = [1, 3, 7, 14, 30, 60, 90];
+    const intervals = [ 3, 7, 14, 30, 60, 90];
     return intervals[Math.min(reviews, intervals.length - 1)];
   };
 
@@ -52,7 +53,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
 
   if (isEditing) {
     return (
-      <tr className="border-b border-zinc-800 bg-zinc-800/30">
+      <tr className=" border-b border-zinc-800 bg-zinc-800/30">
         <td className="px-4 py-3 text-zinc-400">{index}</td>
         <td className="px-4 py-3">
           <input
@@ -86,7 +87,15 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
             className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </td>
-        <td className="px-4 py-3 text-center text-white">{problem.successfulReviews}</td>
+        {/* <td className="px-4 py-3 text-center text-white">{problem.successfulReviews}</td> */}
+        <td className="px-4 py-3 text-center text-white">
+            <input
+              type="number"
+              value={editData.successfulReviews}
+              onChange={(e) => setEditData({ ...editData, successfulReviews: e.target.value })}
+              className="w-16 px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </td>
         <td className="px-4 py-3">
           <div className="flex items-center justify-center gap-2">
             <button
@@ -114,7 +123,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
   }
 
   return (
-    <tr className="border-b border-zinc-800 hover:bg-zinc-800/30 transition-colors group">
+    <tr className="hover:rounded-4xl border-b border-zinc-800 hover:bg-zinc-800/30 transition-colors group">
       <td className="px-4 py-4 text-zinc-400 font-medium">{index}</td>
       <td className="px-4 py-4 text-white font-medium">{problem.problemName}</td>
       <td className="px-4 py-4 text-center">
@@ -142,7 +151,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
         </span>
       </td>
       <td className="px-4 py-4">
-        <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center justify-center gap-2  transition-opacity">
           <button
             onClick={handleMarkSolved}
             className="p-2 bg-green-600 hover:bg-green-700 rounded-lg transition-all transform hover:scale-110"

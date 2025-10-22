@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -15,6 +15,7 @@ export default function LoginDialog({ isOpen, onClose }) {
 
   const { login } = useAuth();
   const createUser = useMutation(api.users.createUser);
+  const User = useQuery(api.users.getUserByEmail, email ? { email } : "skip");
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
@@ -22,10 +23,9 @@ export default function LoginDialog({ isOpen, onClose }) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/check-user?email=${encodeURIComponent(email)}`);
-      const data = await response.json();
+      const userExists = !!User;
 
-      if (data.exists) {
+      if (userExists) {
         login(email);
         onClose();
       } else {
@@ -102,7 +102,7 @@ export default function LoginDialog({ isOpen, onClose }) {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-zinc-300 mb-2">
-                Email Address
+                Email
               </label>
               <input
                 type="email"

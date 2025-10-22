@@ -83,17 +83,17 @@ export default function StatsOverview({ problems, patterns }) {
       {stats.map((stat, index) => (
         <div
           key={stat.label}
-          className={`relative overflow-hidden rounded-xl bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 p-6 transition-all hover:scale-105 hover:border-zinc-700 ${
+          className={`w-42 p-3.5 relative overflow-hidden rounded-full hover:shadow-xl hover:shadow-blue-300/30 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800  cursor-pointer transform transition-all duration-300 hover:scale-105 hover:border-zinc-700 ${
             stat.highlight ? "animate-pulse" : ""
           }`}
           style={{
             animationDelay: `${index * 100}ms`,
           }}
         >
-          <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-10`}></div>
+          <div className={`absolute inset-0 bg-linear-to-br ${stat.color} opacity-10`}></div>
 
-          <div className="relative">
-            <div className={`inline-flex p-3 rounded-lg bg-gradient-to-br ${stat.color} mb-3`}>
+          <div className="relative flex flex-col items-center text-center space-y-2">
+            <div className={`inline-flex p-2 rounded-lg bg-linear-to-br ${stat.color} mb-3`}>
               <div className="text-white">{stat.icon}</div>
             </div>
 

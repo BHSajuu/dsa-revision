@@ -20,7 +20,7 @@ export default function ReviewReminders({ problems }) {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 animate-slideUp">
-      <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl shadow-2xl p-6 max-w-md border border-orange-400/50">
+      <div className="bg-linear-to-br from-orange-500 to-red-500 rounded-4xl shadow-2xl p-6 max-w-md border border-orange-400/50">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
