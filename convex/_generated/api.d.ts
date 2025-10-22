@@ -8,6 +8,10 @@
  * @module
  */
 
+import type * as patterns from "../patterns.js";
+import type * as problems from "../problems.js";
+import type * as users from "../users.js";
+
 import type {
   ApiFromModules,
   FilterApi,
@@ -22,7 +26,11 @@ import type {
  * const myFunctionReference = api.myModule.myFunction;
  * ```
  */
-declare const fullApi: ApiFromModules<{}>;
+declare const fullApi: ApiFromModules<{
+  patterns: typeof patterns;
+  problems: typeof problems;
+  users: typeof users;
+}>;
 declare const fullApiWithMounts: typeof fullApi;
 
 export declare const api: FilterApi<

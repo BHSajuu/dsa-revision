@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# DSA Revision Tracker - Setup Instructions
 
-## Getting Started
+This is a pattern-based DSA learning platform with spaced repetition built with Next.js and Convex.
 
-First, run the development server:
+## Prerequisites
+
+- Node.js 18+ installed
+- A Convex account (free at https://www.convex.dev/)
+
+## Setup Steps
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Set Up Convex
+
+1. Install Convex CLI globally (if not already installed):
+   ```bash
+   npm install -g convex
+   ```
+
+2. Login to Convex:
+   ```bash
+   npx convex login
+   ```
+
+3. Initialize Convex in your project:
+   ```bash
+   npx convex dev
+   ```
+
+4. This will:
+   - Create a new Convex project
+   - Generate a `.env.local` file with your `NEXT_PUBLIC_CONVEX_URL`
+   - Start the Convex development server
+   - Push your schema and functions to Convex
+
+### 3. Run the Development Server
+
+In a new terminal (keep Convex dev running):
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000` to see your app.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Pattern-Based Organization**: Organize DSA problems by patterns (Sliding Window, Two Pointer, etc.)
+- **Spaced Repetition**: Smart review scheduling using intervals (1, 3, 7, 14, 30, 60, 90 days)
+- **Progress Tracking**: Comprehensive stats dashboard with visual metrics
+- **Review Reminders**: Automatic notifications for problems due for review
+- **Dark Theme**: Beautiful dark mode interface with smooth animations
+- **CRUD Operations**: Full control to add, edit, and delete problems and patterns
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
+1. **Login**: Enter your email to create an account or login
+2. **Add Patterns**: Create patterns like "Sliding Window", "Two Pointer", etc.
+3. **Add Problems**: Add LeetCode problems to each pattern
+4. **Mark as Solved**: Click the green checkmark to mark a problem as solved (automatically schedules next review)
+5. **Track Progress**: View your stats at the top of the dashboard
+6. **Review**: Get notified when problems are due for review
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Frontend**: Next.js 16, React 19, Tailwind CSS 4
+- **Database**: Convex (real-time serverless backend)
+- **Animations**: Custom CSS animations
+- **Deployment**: Can be deployed to Vercel or any Next.js hosting platform
 
-## Deploy on Vercel
+## Database Schema
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Users
+- Email, name, LeetCode profile link
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Patterns
+- Pattern name, user ID, display order
+
+### Problems
+- Problem name, LeetCode link, last solved date, next review date, successful reviews count
