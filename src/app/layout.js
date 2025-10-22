@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "DSA Revision Tracker - Pattern-Based Learning",
   description: "Master Data Structures and Algorithms through pattern-based learning and spaced repetition",
+  icons: {
+    icon: "logo.png", 
+  },
 };
 
 export default function RootLayout({ children }) {

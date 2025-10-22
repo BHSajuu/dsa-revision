@@ -4,12 +4,8 @@ export default function StatsOverview({ problems, patterns }) {
   const totalProblems = problems?.length || 0;
   const totalPatterns = patterns?.length || 0;
 
-  const solvedProblems = problems?.filter((p) => p.lastSolvedDate).length || 0;
-
   const today = new Date().toISOString().split("T")[0];
   const dueToday = problems?.filter((p) => p.nextReviewDate && p.nextReviewDate <= today).length || 0;
-
-  const totalReviews = problems?.reduce((sum, p) => sum + p.successfulReviews, 0) || 0;
 
   const overdue = problems?.filter((p) => p.nextReviewDate && p.nextReviewDate < today).length || 0;
 
@@ -35,16 +31,6 @@ export default function StatsOverview({ problems, patterns }) {
       color: "from-violet-500 to-purple-500",
     },
     {
-      label: "Solved",
-      value: solvedProblems,
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
-      color: "from-green-500 to-emerald-500",
-    },
-    {
       label: "Due Today",
       value: dueToday,
       icon: (
@@ -54,16 +40,6 @@ export default function StatsOverview({ problems, patterns }) {
       ),
       color: "from-orange-500 to-red-500",
       highlight: dueToday > 0,
-    },
-    {
-      label: "Total Reviews",
-      value: totalReviews,
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-      color: "from-pink-500 to-rose-500",
     },
     {
       label: "Overdue",
@@ -79,7 +55,7 @@ export default function StatsOverview({ problems, patterns }) {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+    <div className="pl-24 grid grid-cols-2 md:grid-cols-4  gap-4">
       {stats.map((stat, index) => (
         <div
           key={stat.label}
