@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useAuth } from "../../contexts/AuthContext";
@@ -15,6 +15,7 @@ export default function Dashboard() {
   const { user, logout } = useAuth();
   const [isAddingPattern, setIsAddingPattern] = useState(false);
   const [newPatternName, setNewPatternName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const patterns = useQuery(
     api.patterns.getPatternsByUser,
@@ -37,67 +38,84 @@ export default function Dashboard() {
 
     try {
       await createPattern({
-      name: newPatternName.trim(),
-      userId: user._id,
-      order: patterns?.length || 0,
-    });
+        name: newPatternName.trim(),
+        userId: user._id,
+        order: patterns?.length || 0,
+      });
 
-    setNewPatternName("");
-    setIsAddingPattern(false);
-    toast.success("Pattern added successfully");
+      setNewPatternName("");
+      setIsAddingPattern(false);
+      toast.success("Pattern added successfully");
     } catch (error) {
       toast.error("Failed to add pattern");
     }
   };
 
   const handleAddProblem = async (problemData) => {
-   try {
-       await createProblem({
-      ...problemData,
-      userId: user._id,
-      successfulReviews: 0,
-    });
+    try {
+      await createProblem({
+        ...problemData,
+        userId: user._id,
+        successfulReviews: 0,
+      });
       toast.success("Problem added successfully");
-   } catch (error) {
+    } catch (error) {
       toast.error("Failed to add problem");
-   }
+    }
   };
 
   const handleUpdateProblem = async (problemId, updates) => {
     try {
       await updateProblem({
-      problemId,
-      ...updates,
-    });
-    toast.success("Problem updated successfully");
+        problemId,
+        ...updates,
+      });
+      toast.success("Problem updated successfully");
     } catch (error) {
       toast.error("Failed to update problem");
     }
   };
 
   const handleDeleteProblem = async (problemId) => {
-   try {
-    await deleteProblem({ problemId });
-      toast.success("Problem deleted successfully");  
-   } catch (error) {
+    try {
+      await deleteProblem({ problemId });
+      toast.success("Problem deleted successfully");
+    } catch (error) {
       toast.error("Failed to delete problem");
-   }
-    
+    }
+
   };
 
   const handleDeletePattern = async (patternId) => {
     try {
-       await deletePattern({ patternId });
-       toast.success("Pattern and its problems deleted successfully");
+      await deletePattern({ patternId });
+      toast.success("Pattern and its problems deleted successfully");
     } catch (error) {
-       toast.error("Failed to delete pattern");
+      toast.error("Failed to delete pattern");
     }
-    
+
   };
 
+  // Memoize the filtered problems and patterns
+  const filteredProblems = useMemo(() => {
+    if (!allProblems) return [];
+    if (!searchQuery) return allProblems;
+    return allProblems.filter((p) =>
+      p.problemName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [allProblems, searchQuery]);
+
+  const filteredPatterns = useMemo(() => {
+    if (!patterns) return [];
+    if (!searchQuery) return patterns;
+    const problemPatternIds = new Set(filteredProblems.map((p) => p.patternId));
+    return patterns.filter((p) => problemPatternIds.has(p._id));
+  }, [patterns, filteredProblems, searchQuery]);
+
   const getProblemsByPattern = (patternId) => {
-    return allProblems?.filter((p) => p.patternId === patternId) || [];
+    return filteredProblems?.filter((p) => p.patternId === patternId) || [];
   };
+
 
   if (!patterns || !allProblems) {
     return (
@@ -110,7 +128,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
       <ReviewReminders problems={allProblems} />
-       <div className="absolute inset-0">
+      <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-2000" />
@@ -124,6 +142,16 @@ export default function Dashboard() {
                 <h1 className="text-xl font-bold text-white">DSA Tracker</h1>
                 <p className="text-sm text-zinc-400">Pattern-based Learning</p>
               </div>
+            </div>
+
+            <div className="flex-1 max-w-xl">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for a problem..."
+                className="w-2/3 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-full text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
 
             <div className="flex items-center gap-4">
@@ -149,24 +177,33 @@ export default function Dashboard() {
         <StatsOverview problems={allProblems} patterns={patterns} />
 
         <div className="mt-8 space-y-4">
-          {patterns.map((pattern) => (
-            <div key={pattern._id} className="relative group">
-              <PatternAccordion
-                pattern={pattern}
-                problems={getProblemsByPattern(pattern._id)}
-                onAddProblem={handleAddProblem}
-                onUpdateProblem={handleUpdateProblem}
-                onDeleteProblem={handleDeleteProblem}
-              />
-              <button
-                onClick={() => handleDeletePattern(pattern._id)}
-                className="absolute top-7 right-16 p-2 bg-red-600/0 hover:bg-red-600 text-red-400 hover:text-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
-                title="Delete Pattern"
-              >
-                <Trash2 className="w-5 h-5" />
-              </button>
+          {filteredPatterns.length > 0 ? (
+            filteredPatterns.map((pattern) => (
+              <div key={pattern._id} className="relative group">
+                <PatternAccordion
+                  pattern={pattern}
+                  problems={getProblemsByPattern(pattern._id)}
+                  onAddProblem={handleAddProblem}
+                  onUpdateProblem={handleUpdateProblem}
+                  onDeleteProblem={handleDeleteProblem}
+                />
+                <button
+                  onClick={() => handleDeletePattern(pattern._id)}
+                  className="absolute top-7 right-16 p-2 bg-red-600/0 hover:bg-red-600 text-red-400 hover:text-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                  title="Delete Pattern"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <h3 className="text-xl font-semibold text-white">No Problems Found</h3>
+              <p className="text-zinc-400 mt-2">
+                No problems matched your search for "{searchQuery}".
+              </p>
             </div>
-          ))}
+          )}
 
           {isAddingPattern ? (
             <div className="border-2 border-dashed border-blue-500 rounded-xl p-6 bg-blue-500/5">
