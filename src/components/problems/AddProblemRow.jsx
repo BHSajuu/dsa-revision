@@ -53,6 +53,15 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
         />
       </td>
       <td className="px-4 py-3">
+        <textarea
+          value={formData.notes}
+          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+          placeholder="Notes"
+          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
+          rows={1}
+        />
+      </td>
+      <td className="px-4 py-3">
         <input
           type="date"
           value={formData.lastSolvedDate}

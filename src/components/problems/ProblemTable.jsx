@@ -21,6 +21,7 @@ export default function ProblemTable({ patternId, problems, onAddProblem, onUpda
             <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300">Problem Name</th>
             <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-24">Link</th>
             <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-24">Video</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300">Notes</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-36">Last Solved</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-36">Next Review</th>
             <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-32">Reviews</th>
@@ -45,7 +46,7 @@ export default function ProblemTable({ patternId, problems, onAddProblem, onUpda
             />
           ) : (
             <tr>
-              <td colSpan="7" className="px-4 py-4">
+              <td colSpan="8" className="px-4 py-4">
                 <button
                   onClick={() => setIsAdding(true)}
                   className="w-full py-3 border-2 border-dashed border-zinc-800 rounded-4xl text-zinc-400 hover:border-blue-500 hover:text-blue-400 transition-all flex items-center justify-center gap-2 group"
