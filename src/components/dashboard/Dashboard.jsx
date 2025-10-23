@@ -133,7 +133,7 @@ export default function Dashboard() {
         <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-2000" />
       </div>
-      <header className="w-[85%] ml-28 shadow-xl shadow-blue-200/20 hover:shadow-3xl hover:shadow-blue-300/30 rounded-4xl border border-zinc-800  sticky top-2 z-40 backdrop-blur-xl bg-linear-to-r from-blue-500/5 to-purple-500/5">
+      <header className="w-[85%] ml-28 shadow-xl shadow-blue-200/20 hover:shadow-3xl hover:shadow-blue-300/30 rounded-4xl border border-zinc-800  sticky top-5 z-40 backdrop-blur-xl bg-linear-to-r from-blue-500/5 to-purple-500/5">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -171,10 +171,20 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-6 pt-16 ">
         <StatsOverview problems={allProblems} patterns={patterns} />
 
         <div className="mt-8 space-y-4">
+          {filteredPatterns.length == 0 && 
+          <>
+            <div className="text-center py-12">
+            <h2 className="text-2xl font-semibold text-white mb-2">No Patterns Found</h2>
+            <p className="text-zinc-400">
+              It looks like you haven't added any patterns yet. Start by adding a new pattern or a problem to organize your problems effectively.
+            </p>
+            </div>
+          </>}
+
           {filteredPatterns.length > 0 ? (
             filteredPatterns.map((pattern) => (
               <div key={pattern._id} className="relative group">
@@ -194,7 +204,7 @@ export default function Dashboard() {
                 </button>
               </div>
             ))
-          ) : (
+          ) : ( filteredPatterns.length != 0 &&
             <div className="text-center py-12">
               <h3 className="text-xl font-semibold text-white">No Problems Found</h3>
               <p className="text-zinc-400 mt-2">
