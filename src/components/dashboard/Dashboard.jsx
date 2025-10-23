@@ -108,10 +108,14 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#0a0a0f]">
       <ReviewReminders problems={allProblems} />
-
-      <header className="w-[85%] ml-28 shadow-xl shadow-blue-200/20 hover:shadow-3xl hover:shadow-blue-300/30 rounded-4xl border border-zinc-800  sticky top-2 z-40 backdrop-blur-sm bg-gray-950/10">
+       <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-2000" />
+      </div>
+      <header className="w-[85%] ml-28 shadow-xl shadow-blue-200/20 hover:shadow-3xl hover:shadow-blue-300/30 rounded-4xl border border-zinc-800  sticky top-2 z-40 backdrop-blur-xl bg-linear-to-r from-blue-500/5 to-purple-500/5">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
