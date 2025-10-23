@@ -13,9 +13,9 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
     notes: problem.notes || "",
     lastSolvedDate: problem.lastSolvedDate || "",
     nextReviewDate: problem.nextReviewDate || "",
-    successfulReviews: problem.successfulReviews || 0, 
+    successfulReviews: problem.successfulReviews || 0,
   });
-  
+
   const descRef = useRef(null);
   const [showFullDesc, setShowFullDesc] = useState(false);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -58,7 +58,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
     const today = new Date().toISOString().split("T")[0];
     return problem.nextReviewDate === today;
   };
-  
+
   const handleDescriptionClick = (e) => {
     const rect = (e.target).getBoundingClientRect();
     setCoords({ x: rect.left, y: rect.top + window.scrollY });
@@ -85,7 +85,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
             className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </td>
-        
+
         <td className="px-4 py-3">
           <input
             type="url"
@@ -96,7 +96,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
             className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </td>
-        
+
         <td className="px-4 py-3">
           <textarea
             value={editData.notes}
@@ -197,11 +197,11 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
             </svg>
           </a>
         </td>
-        <td 
+        <td
           className=" pt-6 text-zinc-300 text-sm line-clamp-1 cursor-pointer"
-          onClick={handleDescriptionClick}  
+          onClick={handleDescriptionClick}
         >
-        {problem.notes || <span className="text-zinc-600">No notes</span>}
+          {problem.notes || <span className="text-zinc-600">No notes</span>}
         </td>
         <td className="px-4 py-4 text-zinc-300 text-sm">
           {problem.lastSolvedDate || <span className="text-zinc-600">Not solved yet</span>}
@@ -247,22 +247,27 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
         </td>
       </tr>
 
-       {showFullDesc &&
+      {showFullDesc &&
         createPortal(
-          <motion.div
-            ref={descRef}
-            className="absolute text-justify mx-3 hyphens-auto z-50 bg-zinc-900 text-white p-4 rounded-3xl border border-white/10 w-96 hover:cursor-pointer hover:shadow-xl hover:shadow-blue-300/30"
-            style={{
-              top: coords.y + 30,
-              left: coords.x,
-            }}
-            initial={{ scale: 0.2, opacity: 0.5 }}
-            animate={{ scale: 1.25, opacity: 1 }}
-            transition={{ type: "spring", duration: 1.2, bounce: 0.3 }}
+          <div
+            className="fixed inset-0 z-40"
             onClick={() => setShowFullDesc(false)}
+            ref={descRef}
           >
-            <p className="text-sm leading-relaxed">{problem.notes}</p>
-          </motion.div>,
+            <motion.div
+              
+              className="absolute text-justify mx-3 hyphens-auto z-50 bg-zinc-900 text-white p-4 rounded-3xl border border-white/10 w-96 hover:cursor-pointer hover:shadow-xl hover:shadow-blue-300/30"
+              style={{
+                top: coords.y + 30,
+                left: coords.x,
+              }}
+              initial={{ scale: 0.2, opacity: 0.5 }}
+              animate={{ scale: 1.25, opacity: 1 }}
+              transition={{ type: "spring", duration: 1.2, bounce: 0.3 }}
+            >
+              <p className="text-sm leading-relaxed">{problem.notes}</p>
+            </motion.div>
+          </div>,
           document.body
         )}
     </>
