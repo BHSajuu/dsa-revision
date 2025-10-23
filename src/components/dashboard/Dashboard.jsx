@@ -7,7 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import PatternAccordion from "../patterns/PatternAccordion";
 import StatsOverview from "../stats/StatsOverview";
 import ReviewReminders from "../notifications/ReviewReminders";
-import { Trash2 } from "lucide-react";
+import { LogOutIcon, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
@@ -126,9 +126,9 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[#0a0a0f] relative isolate" >
       <ReviewReminders problems={allProblems} />
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-2000" />
@@ -164,9 +164,7 @@ export default function Dashboard() {
                 className="p-2 hover:bg-zinc-800 rounded-lg transition-colors"
                 title="Logout"
               >
-                <svg className="w-5 h-5 text-zinc-400 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
+                <LogOutIcon className="w-6 h-6 text-white" />
               </button>
             </div>
           </div>
@@ -205,7 +203,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {isAddingPattern ? (
+          { isAddingPattern ? (
             <div className="border-2 border-dashed border-blue-500 rounded-xl p-6 bg-blue-500/5">
               <div className="flex gap-3">
                 <input
