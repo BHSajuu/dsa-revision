@@ -7,7 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import PatternAccordion from "../patterns/PatternAccordion";
 import StatsOverview from "../stats/StatsOverview";
 import ReviewReminders from "../notifications/ReviewReminders";
-import { LogOutIcon, Trash2 } from "lucide-react";
+import { LogOutIcon, NotebookIcon, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
@@ -15,6 +15,7 @@ export default function Dashboard() {
   const { user, logout } = useAuth();
   const [isAddingPattern, setIsAddingPattern] = useState(false);
   const [newPatternName, setNewPatternName] = useState("");
+  const [patternNotes, setPatternNotes] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const patterns = useQuery(
@@ -41,10 +42,12 @@ export default function Dashboard() {
         name: newPatternName.trim(),
         userId: user._id,
         order: patterns?.length || 0,
+        patternNotes: patternNotes.trim() || null,
       });
 
       setNewPatternName("");
       setIsAddingPattern(false);
+      setPatternNotes("");
       toast.success("Pattern added successfully");
     } catch (error) {
       toast.error("Failed to add pattern");
@@ -171,7 +174,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 pt-16 ">
+      <main className="max-w-7xl mx-auto px-6 pt-16 pb-8">
         <StatsOverview problems={allProblems} patterns={patterns} />
 
         <div className="mt-8 space-y-4">
@@ -195,6 +198,12 @@ export default function Dashboard() {
                   onUpdateProblem={handleUpdateProblem}
                   onDeleteProblem={handleDeleteProblem}
                 />
+                <button 
+                  className="absolute top-7 right-38 p-2 bg-blue-600/0 hover:bg-blue-600 text-blue-300 hover:text-white rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                  title="Notes"
+                >
+                  <NotebookIcon className="w-5 h-5 " />
+                </button>
                 <button
                   onClick={() => handleDeletePattern(pattern._id)}
                   className="absolute top-7 right-16 p-2 bg-red-600/0 hover:bg-red-600 text-red-400 hover:text-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
@@ -221,7 +230,16 @@ export default function Dashboard() {
                   value={newPatternName}
                   onChange={(e) => setNewPatternName(e.target.value)}
                   placeholder="Enter pattern name (e.g., Sliding Window, Two Pointer)"
-                  className="flex-1 px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1  px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-4xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                  onKeyDown={(e) => e.key === "Enter" && handleAddPattern()}
+                />
+                  <input
+                  type="url"
+                  value={patternNotes}
+                  onChange={(e) => setPatternNotes(e.target.value)}
+                  placeholder="Enter pattern notes (e.g., https://example.com/notes)"
+                  className="flex-1  px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-4xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && handleAddPattern()}
                 />

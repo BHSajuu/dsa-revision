@@ -16,12 +16,14 @@ export const createPattern = mutation({
     name: v.string(),
     userId: v.id("users"),
     order: v.number(),
+    patternNotes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("patterns", {
       name: args.name,
       userId: args.userId,
       order: args.order,
+      patternNotes: args.patternNotes,
     });
   },
 });
@@ -31,12 +33,14 @@ export const updatePattern = mutation({
     patternId: v.id("patterns"),
     name: v.optional(v.string()),
     order: v.optional(v.number()),
+    patternNotes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const { patternId, ...updates } = args;
     const updateData = {};
     if (updates.name !== undefined) updateData.name = updates.name;
     if (updates.order !== undefined) updateData.order = updates.order;
+    if (updates.patternNotes !== undefined) updateData.patternNotes = updates.patternNotes;
 
     await ctx.db.patch(patternId, updateData);
   },

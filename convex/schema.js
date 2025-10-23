@@ -1,5 +1,6 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+import { pattern } from "framer-motion/client";
 
 export default defineSchema({
   users: defineTable({
@@ -12,6 +13,7 @@ export default defineSchema({
     name: v.string(),
     userId: v.id("users"),
     order: v.number(),
+    patternNotes: v.optional(v.string()),
   }).index("by_user", ["userId"]),
 
   problems: defineTable({
