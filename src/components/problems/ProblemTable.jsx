@@ -20,6 +20,7 @@ export default function ProblemTable({ patternId, problems, onAddProblem, onUpda
             <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-16">No.</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300">Problem Name</th>
             <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-24">Link</th>
+            <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-24">Video</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-36">Last Solved</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-36">Next Review</th>
             <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-32">Reviews</th>

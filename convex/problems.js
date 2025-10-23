@@ -30,6 +30,8 @@ export const createProblem = mutation({
     lastSolvedDate: v.optional(v.string()),
     nextReviewDate: v.optional(v.string()),
     successfulReviews: v.optional(v.number()),
+    youtubeLink: v.optional(v.string()), 
+    notes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("problems", {
@@ -40,6 +42,8 @@ export const createProblem = mutation({
       lastSolvedDate: args.lastSolvedDate,
       nextReviewDate: args.nextReviewDate,
       successfulReviews: args.successfulReviews || 0,
+      youtubeLink: args.youtubeLink,
+      notes: args.notes,
     });
   },
 });
@@ -52,6 +56,8 @@ export const updateProblem = mutation({
     lastSolvedDate: v.optional(v.string()),
     nextReviewDate: v.optional(v.string()),
     successfulReviews: v.optional(v.number()),
+    youtubeLink: v.optional(v.string()),
+    notes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const { problemId, ...updates } = args;
@@ -62,6 +68,8 @@ export const updateProblem = mutation({
     if (updates.lastSolvedDate !== undefined) updateData.lastSolvedDate = updates.lastSolvedDate;
     if (updates.nextReviewDate !== undefined) updateData.nextReviewDate = updates.nextReviewDate;
     if (updates.successfulReviews !== undefined) updateData.successfulReviews = updates.successfulReviews;
+    if (updates.youtubeLink !== undefined) updateData.youtubeLink = updates.youtubeLink;
+    if (updates.notes !== undefined) updateData.notes = updates.notes;
 
     await ctx.db.patch(problemId, updateData);
   },

@@ -1,16 +1,25 @@
 "use client";
 
+import { NotebookPen } from "lucide-react";
 import { useState } from "react";
+import NotesDialog from "./NotesDialog";
 
 export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isNotesOpen, setIsNotesOpen] = useState(false);
   const [editData, setEditData] = useState({
     problemName: problem.problemName,
     leetcodeLink: problem.leetcodeLink,
+    youtubeLink: problem.youtubeLink || "",
+    notes: problem.notes || "",
     lastSolvedDate: problem.lastSolvedDate || "",
     nextReviewDate: problem.nextReviewDate || "",
     successfulReviews: problem.successfulReviews || 0,
   });
+
+  const handleSaveNotes = async (newNotes) => {
+    await onUpdate(problem._id, { notes: newNotes });
+  };
 
   const handleSave = async () => {
     await onUpdate(problem._id, editData);
@@ -127,64 +136,95 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
   }
 
   return (
-    <tr className="hover:rounded-4xl border-b border-zinc-800 hover:bg-zinc-800/30 transition-colors group">
-      <td className="px-4 py-4 text-zinc-400 font-medium">{index}</td>
-      <td className="px-4 py-4 text-white font-medium">{problem.problemName}</td>
-      <td className="px-4 py-4 text-center">
-        <a
-          href={problem.leetcodeLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center w-10 h-10 bg-zinc-800 hover:bg-orange-500 rounded-lg transition-all transform hover:scale-110"
-          title="Open in LeetCode"
-        >
-          <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z" />
-          </svg>
-        </a>
-      </td>
-      <td className="px-4 py-4 text-zinc-300 text-sm">
-        {problem.lastSolvedDate || <span className="text-zinc-600">Not solved yet</span>}
-      </td>
-      <td className={`px-4 py-4 text-sm font-medium ${isOverdue() ? "text-red-400" : isDueToday() ? "text-orange-400" : "text-zinc-300"}`}>
-        {problem.nextReviewDate || <span className="text-zinc-600">Not scheduled</span>}
-      </td>
-      <td className="px-4 py-4 text-center">
-        <span className="inline-flex items-center justify-center w-8 h-8 bg-blue-500/20 text-blue-400 rounded-full font-semibold text-sm">
-          {problem.successfulReviews}
-        </span>
-      </td>
-      <td className="px-4 py-4">
-        <div className="flex items-center justify-center gap-2  transition-opacity">
-          <button
-            onClick={handleMarkSolved}
-            className="p-2 bg-green-600 hover:bg-green-700 rounded-lg transition-all transform hover:scale-110"
-            title="Mark as Solved"
+    <>
+      <tr className="hover:rounded-4xl border-b border-zinc-800 hover:bg-zinc-800/30 transition-colors group">
+        <td className="px-4 py-4 text-zinc-400 font-medium">{index}</td>
+        <td className="px-4 py-4 text-white font-medium">{problem.problemName}</td>
+        <td className="px-4 py-4 text-center">
+          <a
+            href={problem.leetcodeLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center w-10 h-10 bg-zinc-800 hover:bg-orange-500 rounded-lg transition-all transform hover:scale-110"
+            title="Open in LeetCode"
           >
-            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z" />
             </svg>
-          </button>
-          <button
-            onClick={() => setIsEditing(true)}
-            className="p-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all transform hover:scale-110"
-            title="Edit"
+          </a>
+        </td>
+        <td className="px-4 py-4 text-center">
+          <a
+            href={problem.youtubeLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center justify-center w-10 h-10 rounded-lg transition-all transform hover:scale-110 ${problem.youtubeLink
+              ? "bg-zinc-800 hover:bg-red-600"
+              : "bg-zinc-800 cursor-not-allowed opacity-50"
+              }`}
+            title="Open in YouTube"
           >
-            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a2.996 2.996 0 0 0-2.107-2.118C19.059 3.5 12 3.5 12 3.5s-7.06 0-9.391.568A2.996 2.996 0 0 0 .502 6.186 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .502 5.814 2.996 2.996 0 0 0 2.107 2.118C4.94 20.5 12 20.5 12 20.5s7.06 0 9.391-.568a2.996 2.996 0 0 0 2.107-2.118A31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
             </svg>
-          </button>
-          <button
-            onClick={() => onDelete(problem._id)}
-            className="p-2 bg-red-600 hover:bg-red-700 rounded-lg transition-all transform hover:scale-110"
-            title="Delete"
-          >
-            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-        </div>
-      </td>
-    </tr>
+          </a>
+        </td>
+        <td className="px-4 py-4 text-zinc-300 text-sm">
+          {problem.lastSolvedDate || <span className="text-zinc-600">Not solved yet</span>}
+        </td>
+        <td className={`px-4 py-4 text-sm font-medium ${isOverdue() ? "text-red-400" : isDueToday() ? "text-orange-400" : "text-zinc-300"}`}>
+          {problem.nextReviewDate || <span className="text-zinc-600">Not scheduled</span>}
+        </td>
+        <td className="px-4 py-4 text-center">
+          <span className="inline-flex items-center justify-center w-8 h-8 bg-blue-500/20 text-blue-400 rounded-full font-semibold text-sm">
+            {problem.successfulReviews}
+          </span>
+        </td>
+        <td className="px-4 py-4">
+          <div className="flex items-center justify-center gap-2  transition-opacity">
+            <button
+              onClick={handleMarkSolved}
+              className="p-2 bg-green-600 hover:bg-green-700 rounded-lg transition-all transform hover:scale-110"
+              title="Mark as Solved"
+            >
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setIsNotesOpen(true)}
+              className="p-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg"
+              title="Notes"
+            >
+              <NotebookPen className="w-4 h-4 text-white" />
+            </button>
+            <button
+              onClick={() => setIsEditing(true)}
+              className="p-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all transform hover:scale-110"
+              title="Edit"
+            >
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => onDelete(problem._id)}
+              className="p-2 bg-red-600 hover:bg-red-700 rounded-lg transition-all transform hover:scale-110"
+              title="Delete"
+            >
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+      <NotesDialog
+        isOpen={isNotesOpen}
+        onClose={() => setIsNotesOpen(false)}
+        initialNotes={problem.notes}
+        onSave={handleSaveNotes}
+      />
+    </>
   );
 }

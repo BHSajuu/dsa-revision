@@ -22,6 +22,8 @@ export default defineSchema({
     lastSolvedDate: v.optional(v.string()),
     nextReviewDate: v.optional(v.string()),
     successfulReviews: v.number(),
+    youtubeLink: v.optional(v.string()), 
+    notes: v.optional(v.string()),  
   }).index("by_pattern", ["patternId"])
     .index("by_user", ["userId"]),
 });

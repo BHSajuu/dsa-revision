@@ -6,6 +6,8 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
   const [formData, setFormData] = useState({
     problemName: "",
     leetcodeLink: "",
+    youtubeLink: "",
+    notes: "",
     lastSolvedDate: "",
     nextReviewDate: "",
   });
@@ -39,6 +41,15 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
           onChange={(e) => setFormData({ ...formData, leetcodeLink: e.target.value })}
           placeholder="https://leetcode.com/..."
           className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </td>
+      <td className="px-4 py-3">
+        <input
+          type="url"
+          value={formData.youtubeLink}
+          onChange={(e) => setFormData({ ...formData, youtubeLink: e.target.value })}
+          placeholder="https://youtube.com/..."
+          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
         />
       </td>
       <td className="px-4 py-3">
