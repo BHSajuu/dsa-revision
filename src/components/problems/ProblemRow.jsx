@@ -77,34 +77,34 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
             className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </td>
-        <td className="px-4 py-3">
+        <td className="px-3 py-3">
           <input
             type="url"
             value={editData.leetcodeLink}
             onChange={(e) => setEditData({ ...editData, leetcodeLink: e.target.value })}
-            className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-12 px-1 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </td>
 
-        <td className="px-4 py-3">
+        <td className="px-3 py-3">
           <input
             type="url"
             value={editData.youtubeLink}
             onChange={(e) =>
               setEditData({ ...editData, youtubeLink: e.target.value })
             }
-            className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-12 px-1 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </td>
 
-        <td className="px-4 py-3">
-          <textarea
+        <td className=" py-3">
+          <input
+            type="text"
             value={editData.notes}
             onChange={(e) =>
               setEditData({ ...editData, notes: e.target.value })
             }
-            className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows={1}
+            className="w-28 px-1 py-1 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </td>
 

@@ -34,31 +34,32 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
           autoFocus
         />
       </td>
-      <td className="px-4 py-3">
+      <td className="px-3 py-3">
         <input
           type="url"
           value={formData.leetcodeLink}
           onChange={(e) => setFormData({ ...formData, leetcodeLink: e.target.value })}
           placeholder="https://leetcode.com/..."
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-12 px-1 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </td>
-      <td className="px-4 py-3">
+      <td className="px-3 py-3">
         <input
           type="url"
           value={formData.youtubeLink}
           onChange={(e) => setFormData({ ...formData, youtubeLink: e.target.value })}
           placeholder="https://youtube.com/..."
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
+          className="w-12 px-1 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
         />
       </td>
-      <td className="px-4 py-3">
-        <textarea
+      <td className=" py-3">
+        <input
+          type="text"
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           placeholder="Notes"
-          className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
-          rows={1}
+          className="w-28 px-1 py-1 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
+          
         />
       </td>
       <td className="px-4 py-3">

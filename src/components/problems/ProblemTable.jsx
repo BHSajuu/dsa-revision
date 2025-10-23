@@ -17,15 +17,15 @@ export default function ProblemTable({ patternId, problems, onAddProblem, onUpda
       <table className="w-full border-collapse">
         <thead>
           <tr className="border-b border-zinc-800">
-            <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-6">No.</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-2/7">Problem Name</th>
-            <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-4">Link</th>
-            <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-4">Video</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-32">Notes</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-32">Last Solved</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-300 w-32">Next Review</th>
-            <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-3">Reviews</th>
-            <th className="px-4 py-3 text-center text-sm font-semibold text-zinc-300 w-6">Actions</th>
+            <th className="px-4 py-3 text-left text-sm font-bold text-zinc-300 w-6">No.</th>
+            <th className="px-4 py-3 text-left text-sm font-bold text-zinc-300 w-2/7">Problem Name</th>
+            <th className="px-4 py-3 text-center text-sm font-bold text-zinc-300 w-4">Link</th>
+            <th className="px-4 py-3 text-center text-sm font-bold text-zinc-300 w-4">Video</th>
+            <th className="px-4 py-3 text-left text-sm font-bold text-zinc-300 w-32">Notes</th>
+            <th className="px-4 py-3 text-left text-sm font-bold text-zinc-300 w-32">Last Solved</th>
+            <th className="px-4 py-3 text-left text-sm font-bold text-zinc-300 w-32">Next Review</th>
+            <th className="px-4 py-3 text-center text-sm font-bold text-zinc-300 w-3">Reviews</th>
+            <th className="px-4 py-3 text-center text-sm font-bold text-zinc-300 w-6">Actions</th>
           </tr>
         </thead>
         <tbody>
