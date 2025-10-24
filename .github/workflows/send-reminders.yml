@@ -1,0 +1,20 @@
+
+
+name: Send Daily Revision Reminders
+
+# Run every day at 9 AM UTC
+on:
+  schedule:
+    - cron:  '0 9 * * *'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl the reminder endpoint
+        env:
+          VERCEL_URL: ${{ secrets.VERCEL_URL }}
+        run: |
+          curl -X GET "$VERCEL_URL/api/cron/send-reminders"

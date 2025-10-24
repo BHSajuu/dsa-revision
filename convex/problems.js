@@ -99,3 +99,13 @@ export const incrementReviews = mutation({
     });
   },
 });
+
+export const getProblemsForReminder = query({
+  handler: async (ctx) => {
+    const today = new Date().toISOString().split("T")[0]; 
+    return await ctx.db
+      .query("problems")
+      .filter((q) => q.eq(q.field("nextReviewDate"), today))
+      .collect();
+  },
+});
