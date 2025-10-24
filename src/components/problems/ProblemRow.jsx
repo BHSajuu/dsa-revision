@@ -254,8 +254,8 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
             ref={descRef}
           >
             <motion.div
-              
-              className="absolute text-justify mx-3 hyphens-auto z-50 bg-zinc-900 text-white p-4 rounded-3xl border border-white/10 w-96 hover:cursor-pointer hover:shadow-xl hover:shadow-blue-300/30"
+
+              className="absolute text-justify mx-3 hyphens-auto z-50 bg-zinc-900 text-white p-4 rounded-3xl border border-white/10 w-[450px] hover:cursor-pointer hover:shadow-xl hover:shadow-blue-300/30"
               style={{
                 top: coords.y + 30,
                 left: coords.x,

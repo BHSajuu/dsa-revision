@@ -95,6 +95,12 @@ export default function Dashboard() {
   };
 
   const handleDeletePattern = async (patternId) => {
+    const pattern = patterns.find((p) => p._id === patternId);
+    if (!pattern) return;
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the pattern "${pattern.name}" and all its associated problems? This action cannot be undone.`
+    );
+    if (!confirmDelete) return;
     try {
       await deletePattern({ patternId });
       toast.success("Pattern and its problems deleted successfully");
@@ -318,7 +324,7 @@ export default function Dashboard() {
           )}
 
           {isAddingPattern ? (
-            <div className="border-2 border-dashed border-blue-500 rounded-xl p-6 bg-blue-500/5">
+            <div className="border-2 border-dashed border-blue-500 rounded-3xl p-6 bg-blue-500/5">
               <div className="flex gap-3">
                 <input
                   type="text"
@@ -340,7 +346,7 @@ export default function Dashboard() {
                 />
                 <button
                   onClick={handleAddPattern}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all"
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all"
                 >
                   Add
                 </button>
@@ -349,7 +355,7 @@ export default function Dashboard() {
                     setIsAddingPattern(false);
                     setNewPatternName("");
                   }}
-                  className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-lg transition-all"
+                  className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-full transition-all"
                 >
                   Cancel
                 </button>

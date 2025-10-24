@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
 
   const handleSubmit = () => {
     if (!formData.problemName.trim() || !formData.leetcodeLink.trim()) {
-      alert("Please fill in the problem name and LeetCode link");
+      toast.error("Problem Name and Link are required.");
       return;
     }
 
@@ -32,6 +33,7 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
           placeholder="Problem name"
           className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           autoFocus
+          required
         />
       </td>
       <td className="px-3 py-3">
@@ -41,6 +43,7 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
           onChange={(e) => setFormData({ ...formData, leetcodeLink: e.target.value })}
           placeholder="https://leetcode.com/..."
           className="w-12 px-1 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+         required
         />
       </td>
       <td className="px-3 py-3">
