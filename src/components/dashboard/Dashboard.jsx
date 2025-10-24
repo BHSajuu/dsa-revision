@@ -7,7 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import PatternAccordion from "../patterns/PatternAccordion";
 import StatsOverview from "../stats/StatsOverview";
 import ReviewReminders from "../notifications/ReviewReminders";
-import {  EditIcon, LogOutIcon, NotebookIcon, Trash2 } from "lucide-react";
+import { EditIcon, LogOutIcon, NotebookIcon, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
@@ -104,16 +104,16 @@ export default function Dashboard() {
 
   };
 
-  const handleOpenNotes = (patternId) =>{
+  const handleOpenNotes = (patternId) => {
     const pattern = patterns.find((p) => p._id === patternId);
-    if(pattern && pattern.patternNotes){
+    if (pattern && pattern.patternNotes) {
       window.open(pattern.patternNotes, '_blank');
     } else {
       toast.error("No notes available for this pattern");
     }
   }
 
- const handleEditPattern = async (patternId) =>{
+  const handleEditPattern = async (patternId) => {
     setIsEditingPattern(true);
     const pattern = patterns.find((p) => p._id === patternId);
     if (pattern) {
@@ -121,7 +121,7 @@ export default function Dashboard() {
       setEditedPatternNotes(pattern.patternNotes);
       setEditingPatternId(pattern._id);
     }
- }
+  }
 
   const handleUpdatePattern = async () => {
     if (!editedPatternName.trim()) return;
@@ -162,7 +162,7 @@ export default function Dashboard() {
   const getProblemsByPattern = (patternId) => {
     return filteredProblems?.filter((p) => p.patternId === patternId) || [];
   };
-  
+
 
   if (!patterns || !allProblems) {
     return (
@@ -222,15 +222,15 @@ export default function Dashboard() {
         <StatsOverview problems={allProblems} patterns={patterns} />
 
         <div className="mt-8 space-y-4">
-          {filteredPatterns.length == 0 && 
-          <>
-            <div className="text-center py-12">
-            <h2 className="text-2xl font-semibold text-white mb-2">No Patterns Found</h2>
-            <p className="text-zinc-400">
-              It looks like you haven't added any patterns yet. Start by adding a new pattern or a problem to organize your problems effectively.
-            </p>
-            </div>
-          </>}
+          {filteredPatterns.length == 0 &&
+            <>
+              <div className="text-center py-12">
+                <h2 className="text-2xl font-semibold text-white mb-2">No Patterns Found</h2>
+                <p className="text-zinc-400">
+                  It looks like you haven't added any patterns yet. Start by adding a new pattern or a problem to organize your problems effectively.
+                </p>
+              </div>
+            </>}
 
           {filteredPatterns.length > 0 ? (
             filteredPatterns.map((pattern) => (
@@ -263,9 +263,52 @@ export default function Dashboard() {
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>
+
+                {isEditingPattern && pattern._id === editingPatternId &&
+                  <div  className="relative z-50 border-2 border-dashed border-blue-500 rounded-3xl p-6 bg-blue-500/5">
+                    <div className="flex gap-3">
+                      <input
+                        type="text"
+                        value={editedPatternName}
+                        onChange={(e) => setEditedPatternName(e.target.value)}
+                        placeholder="Enter pattern name (e.g., Sliding Window, Two Pointer)"
+                        className="flex-1  px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-4xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        autoFocus
+                        onKeyDown={(e) => e.key === "Enter" && handleUpdatePattern()}
+                      />
+                      <input
+                        type="url"
+                        value={editedPatternNotes}
+                        onChange={(e) => setEditedPatternNotes(e.target.value)}
+                        placeholder="Enter pattern notes (e.g., https://example.com/notes)"
+                        className="flex-1  px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-4xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        autoFocus
+                        onKeyDown={(e) => e.key === "Enter" && handleUpdatePattern()}
+                      />
+                      <button
+                        onClick={handleUpdatePattern}
+                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all"
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsEditingPattern(false);
+                          setEditedPatternName("");
+                          setEditedPatternNotes("");
+                          setEditingPatternId(null);
+                        }}
+                        className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-full transition-all"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                }
               </div>
+
             ))
-          ) : ( filteredPatterns.length != 0 &&
+          ) : (filteredPatterns.length != 0 &&
             <div className="text-center py-12">
               <h3 className="text-xl font-semibold text-white">No Problems Found</h3>
               <p className="text-zinc-400 mt-2">
@@ -274,7 +317,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          { isAddingPattern ? (
+          {isAddingPattern ? (
             <div className="border-2 border-dashed border-blue-500 rounded-xl p-6 bg-blue-500/5">
               <div className="flex gap-3">
                 <input
@@ -286,7 +329,7 @@ export default function Dashboard() {
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && handleAddPattern()}
                 />
-                  <input
+                <input
                   type="url"
                   value={patternNotes}
                   onChange={(e) => setPatternNotes(e.target.value)}
@@ -324,47 +367,7 @@ export default function Dashboard() {
             </button>
           )}
         </div>
-        {isEditingPattern &&     
-         <div className="relative z-50 border-2 border-dashed border-blue-500 rounded-xl p-6 bg-blue-500/5">
-              <div className="flex gap-3">
-                <input
-                  type="text"
-                  value={editedPatternName}
-                  onChange={(e) => setEditedPatternName(e.target.value)}
-                  placeholder="Enter pattern name (e.g., Sliding Window, Two Pointer)"
-                  className="flex-1  px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-4xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  autoFocus
-                  onKeyDown={(e) => e.key === "Enter" && handleUpdatePattern()}
-                />
-                  <input
-                  type="url"
-                  value={editedPatternNotes}
-                  onChange={(e) => setEditedPatternNotes(e.target.value)}
-                  placeholder="Enter pattern notes (e.g., https://example.com/notes)"
-                  className="flex-1  px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-4xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  autoFocus
-                  onKeyDown={(e) => e.key === "Enter" && handleUpdatePattern()}
-                />
-                <button
-                  onClick={handleUpdatePattern}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => {
-                    setIsEditingPattern(false);
-                    setEditedPatternName("");
-                    setEditedPatternNotes("");
-                    setEditingPatternId(null);
-                  }}
-                  className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-lg transition-all"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>  
-           }
+
       </main>
     </div>
   );
