@@ -7,7 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import PatternAccordion from "../patterns/PatternAccordion";
 import StatsOverview from "../stats/StatsOverview";
 import ReviewReminders from "../notifications/ReviewReminders";
-import { LogOutIcon, NotebookIcon, Trash2 } from "lucide-react";
+import {  EditIcon, LogOutIcon, NotebookIcon, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
@@ -17,6 +17,10 @@ export default function Dashboard() {
   const [newPatternName, setNewPatternName] = useState("");
   const [patternNotes, setPatternNotes] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isEditingPattern, setIsEditingPattern] = useState(false);
+  const [editedPatternName, setEditedPatternName] = useState("");
+  const [editedPatternNotes, setEditedPatternNotes] = useState("");
+  const [editingPatternId, setEditingPatternId] = useState(null);
 
   const patterns = useQuery(
     api.patterns.getPatternsByUser,
@@ -29,6 +33,7 @@ export default function Dashboard() {
   );
 
   const createPattern = useMutation(api.patterns.createPattern);
+  const updatePattern = useMutation(api.patterns.updatePattern);
   const createProblem = useMutation(api.problems.createProblem);
   const updateProblem = useMutation(api.problems.updateProblem);
   const deleteProblem = useMutation(api.problems.deleteProblem);
@@ -99,6 +104,45 @@ export default function Dashboard() {
 
   };
 
+  const handleOpenNotes = (patternId) =>{
+    const pattern = patterns.find((p) => p._id === patternId);
+    if(pattern && pattern.patternNotes){
+      window.open(pattern.patternNotes, '_blank');
+    } else {
+      toast.error("No notes available for this pattern");
+    }
+  }
+
+ const handleEditPattern = async (patternId) =>{
+    setIsEditingPattern(true);
+    const pattern = patterns.find((p) => p._id === patternId);
+    if (pattern) {
+      setEditedPatternName(pattern.name);
+      setEditedPatternNotes(pattern.patternNotes);
+      setEditingPatternId(pattern._id);
+    }
+ }
+
+  const handleUpdatePattern = async () => {
+    if (!editedPatternName.trim()) return;
+
+    try {
+      await updatePattern({
+        patternId: editingPatternId,
+        name: editedPatternName.trim(),
+        patternNotes: editedPatternNotes.trim() || null,
+      });
+
+      setEditedPatternName("");
+      setEditedPatternNotes("");
+      setEditingPatternId(null);
+      setIsEditingPattern(false);
+      toast.success("Pattern updated successfully");
+    } catch (error) {
+      toast.error("Failed to update pattern");
+    }
+  };
+
   // Memoize the filtered problems and patterns
   const filteredProblems = useMemo(() => {
     if (!allProblems) return [];
@@ -118,7 +162,7 @@ export default function Dashboard() {
   const getProblemsByPattern = (patternId) => {
     return filteredProblems?.filter((p) => p.patternId === patternId) || [];
   };
-
+  
 
   if (!patterns || !allProblems) {
     return (
@@ -198,15 +242,23 @@ export default function Dashboard() {
                   onUpdateProblem={handleUpdateProblem}
                   onDeleteProblem={handleDeleteProblem}
                 />
-                <button 
-                  className="absolute top-7 right-38 p-2 bg-blue-600/0 hover:bg-blue-600 text-blue-300 hover:text-white rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                <button
+                  onClick={() => handleOpenNotes(pattern._id)}
+                  className="absolute top-7 right-52 p-2 bg-blue-600/0 hover:bg-blue-600 text-blue-300 hover:text-white rounded-xl transition-all opacity-0 group-hover:opacity-100"
                   title="Notes"
                 >
                   <NotebookIcon className="w-5 h-5 " />
                 </button>
                 <button
+                  onClick={() => handleEditPattern(pattern._id)}
+                  className="absolute top-7 right-36 p-2 bg-yellow-600/0 hover:bg-yellow-600 text-yellow-300 hover:text-white rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                  title="Edit"
+                >
+                  <EditIcon className="w-5 h-5 " />
+                </button>
+                <button
                   onClick={() => handleDeletePattern(pattern._id)}
-                  className="absolute top-7 right-16 p-2 bg-red-600/0 hover:bg-red-600 text-red-400 hover:text-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                  className="absolute top-7 right-20 p-2 bg-red-600/0 hover:bg-red-600 text-red-400 hover:text-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
                   title="Delete Pattern"
                 >
                   <Trash2 className="w-5 h-5" />
@@ -272,6 +324,47 @@ export default function Dashboard() {
             </button>
           )}
         </div>
+        {isEditingPattern &&     
+         <div className="relative z-50 border-2 border-dashed border-blue-500 rounded-xl p-6 bg-blue-500/5">
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  value={editedPatternName}
+                  onChange={(e) => setEditedPatternName(e.target.value)}
+                  placeholder="Enter pattern name (e.g., Sliding Window, Two Pointer)"
+                  className="flex-1  px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-4xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                  onKeyDown={(e) => e.key === "Enter" && handleUpdatePattern()}
+                />
+                  <input
+                  type="url"
+                  value={editedPatternNotes}
+                  onChange={(e) => setEditedPatternNotes(e.target.value)}
+                  placeholder="Enter pattern notes (e.g., https://example.com/notes)"
+                  className="flex-1  px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-4xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                  onKeyDown={(e) => e.key === "Enter" && handleUpdatePattern()}
+                />
+                <button
+                  onClick={handleUpdatePattern}
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => {
+                    setIsEditingPattern(false);
+                    setEditedPatternName("");
+                    setEditedPatternNotes("");
+                    setEditingPatternId(null);
+                  }}
+                  className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-lg transition-all"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>  
+           }
       </main>
     </div>
   );
