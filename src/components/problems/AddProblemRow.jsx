@@ -12,6 +12,7 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
     lastSolvedDate: "",
     nextReviewDate: "",
   });
+  const [imageFile, setImageFile] = useState(null);
 
   const handleSubmit = () => {
     if (!formData.problemName.trim() || !formData.leetcodeLink.trim()) {
@@ -19,7 +20,7 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
       return;
     }
 
-    onSave(formData);
+    onSave(formData, imageFile);
   };
 
   return (
@@ -62,7 +63,12 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           placeholder="Notes"
           className="w-28 px-1 py-1 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
-
+        />
+        <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files[0])}
+            className="w-28 mt-2 text-xs text-zinc-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-zinc-700 file:text-zinc-300 hover:file:bg-zinc-600"
         />
       </td>
       <td className="px-4 py-3">

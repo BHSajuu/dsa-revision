@@ -26,6 +26,7 @@ export default defineSchema({
     successfulReviews: v.number(),
     youtubeLink: v.optional(v.string()), 
     notes: v.optional(v.string()),  
+    imageStorageId: v.optional(v.id("_storage")),
   }).index("by_pattern", ["patternId"])
     .index("by_user", ["userId"]),
 });

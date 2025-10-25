@@ -1,6 +1,6 @@
 "use client";
 
-import {  useState } from "react";
+import { useState } from "react";
 import PlatformIcon, { getPlatform, getPlatformHoverColor } from "./PlatformIcon";
 
 export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowNote }) {
@@ -15,10 +15,13 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
     successfulReviews: problem.successfulReviews || 0,
   });
 
+  const [imageFile, setImageFile] = useState(null);
+
 
   const handleSave = async () => {
-    await onUpdate(problem._id, editData);
+    await onUpdate(problem._id, editData, imageFile);
     setIsEditing(false);
+    setImageFile(null);
   };
 
   const handleMarkSolved = async () => {
@@ -55,11 +58,14 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
     return problem.nextReviewDate === today;
   };
 
- const handleDescriptionClick = () => {
-    if (problem.notes && onShowNote) {
-      onShowNote(problem.notes);
+  const hasNoteContent = problem.notes || problem.imageUrl;
+
+  const handleDescriptionClick = () => {
+    if (hasNoteContent && onShowNote) {
+      onShowNote({ text: problem.notes, imageUrl: problem.imageUrl });
     }
   };
+
 
   if (isEditing) {
     return (
@@ -101,6 +107,12 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
               setEditData({ ...editData, notes: e.target.value })
             }
             className="w-28 px-1 py-1 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files[0])}
+            className="w-28 mt-2 text-xs text-zinc-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-zinc-700 file:text-zinc-300 hover:file:bg-zinc-600"
           />
         </td>
 
@@ -195,7 +207,10 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
           className=" pt-6 text-zinc-300 text-sm line-clamp-1 cursor-pointer"
           onClick={handleDescriptionClick}
         >
-          {problem.notes || <span className="text-zinc-600">No notes</span>}
+          {problem.imageUrl && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            )}
+            {problem.notes || (!problem.imageUrl && <span className="text-zinc-600">No notes</span>)}
         </td>
         <td className="px-4 py-4 text-zinc-300 text-sm">
           {problem.lastSolvedDate || <span className="text-zinc-600">Not solved yet</span>}

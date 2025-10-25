@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useAuth } from "../../contexts/AuthContext";
 import PatternAccordion from "../patterns/PatternAccordion";
@@ -40,6 +40,7 @@ export default function Dashboard() {
   const updateProblem = useMutation(api.problems.updateProblem);
   const deleteProblem = useMutation(api.problems.deleteProblem);
   const deletePattern = useMutation(api.patterns.deletePattern);
+  const generateUploadUrl = useAction(api.problems.generateUploadUrl);
 
   const handleAddPattern = async () => {
     if (!newPatternName.trim()) return;
@@ -60,28 +61,59 @@ export default function Dashboard() {
       toast.error("Failed to add pattern");
     }
   };
-
-  const handleAddProblem = async (problemData) => {
+ 
+const handleAddProblem = async (problemData, imageFile) => {
     try {
+      let imageStorageId;
+      if (imageFile) {
+        // Step 1: Get a short-lived upload URL
+        const postUrl = await generateUploadUrl();
+        // Step 2: POST the file to the URL
+        const result = await fetch(postUrl, {
+          method: "POST",
+          headers: { "Content-Type": imageFile.type },
+          body: imageFile,
+        });
+        const { storageId } = await result.json();
+        imageStorageId = storageId;
+      }
+
+      // Step 3: Save the problem with the new storage ID
       await createProblem({
         ...problemData,
         userId: user._id,
         successfulReviews: 0,
+        imageStorageId: imageStorageId, 
       });
       toast.success("Problem added successfully");
     } catch (error) {
-      toast("Failed to add problem");
+      console.error(error);
+      toast.error("Failed to add problem");
     }
   };
 
-  const handleUpdateProblem = async (problemId, updates) => {
+ const handleUpdateProblem = async (problemId, updates, imageFile) => {
     try {
+      let imageStorageId = updates.imageStorageId; // Keep existing image unless new one is uploaded
+      if (imageFile) {
+        const postUrl = await generateUploadUrl();
+        const result = await fetch(postUrl, {
+          method: "POST",
+          headers: { "Content-Type": imageFile.type },
+          body: imageFile,
+        });
+        const { storageId } = await result.json();
+        imageStorageId = storageId;
+      }
+      
       await updateProblem({
         problemId,
         ...updates,
+        imageStorageId: imageStorageId,
       });
       toast.success("Problem updated successfully");
     } catch (error) {
+      console.error(error);
       toast.error("Failed to update problem");
     }
   };
