@@ -2,10 +2,17 @@
 
 name: Send Daily Revision Reminders
 
-# Run every day at 9 AM UTC
+# This workflow is triggered on a daily basis at specific times
 on:
   schedule: 
-    - cron:  '0 9 * * *'
+    # Runs at 8:00 AM IST (2:30 UTC)
+    - cron: '30 2 * * *'
+    # Runs at 12:30 PM IST (7:00 UTC)
+    - cron: '0 7 * * *'
+    # Runs at 6:00 PM IST (12:30 UTC)
+    - cron: '30 12 * * *'
+    # Runs at 10:00 PM IST (16:30 UTC)
+    - cron: '30 16 * * *'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
