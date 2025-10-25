@@ -16,10 +16,13 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
   });
 
   const [imageFile, setImageFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   const handleSave = async () => {
+    setIsSubmitting(true);
     await onUpdate(problem._id, editData, imageFile);
+    setIsSubmitting(false);
     setIsEditing(false);
     setImageFile(null);
   };
@@ -70,6 +73,14 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
   if (isEditing) {
     return (
       <tr className=" border-b border-zinc-800 bg-zinc-800/30">
+        {isSubmitting && (
+          <td colSpan="9" className="absolute inset-0 bg-zinc-900/80 flex items-center justify-center rounded-lg">
+            <div className="text-white flex items-center gap-2">
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-blue-400"></div>
+              Uploading...
+            </div>
+          </td>
+        )}
         <td className="px-4 py-3 text-zinc-400">{index}</td>
         <td className="px-4 py-3">
           <input
@@ -149,6 +160,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
           <div className="flex items-center justify-center gap-2">
             <button
               onClick={handleSave}
+              disabled={isSubmitting}
               className="p-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
               title="Save"
             >
@@ -158,6 +170,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
             </button>
             <button
               onClick={() => setIsEditing(false)}
+              disabled={isSubmitting}
               className="p-2 bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors"
               title="Cancel"
             >
@@ -208,9 +221,9 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
           onClick={handleDescriptionClick}
         >
           {problem.imageUrl && (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-            )}
-            {problem.notes || (!problem.imageUrl && <span className="text-zinc-600">No notes</span>)}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
+          )}
+          {problem.notes || (!problem.imageUrl && <span className="text-zinc-600">No notes</span>)}
         </td>
         <td className="px-4 py-4 text-zinc-300 text-sm">
           {problem.lastSolvedDate || <span className="text-zinc-600">Not solved yet</span>}

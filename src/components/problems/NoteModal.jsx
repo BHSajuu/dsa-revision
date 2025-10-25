@@ -4,13 +4,28 @@
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
+import { useState, useEffect } from "react";
+
+
+const Spinner = () => (
+  <div className="flex justify-center items-center h-48 bg-zinc-800/50 rounded-lg">
+    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-400"></div>
+  </div>
+);
 
 export default function NoteModal({ note, onClose }) {
-  if (!note) {
-    return null;
-  }
-
+  if(!note) return null;
+  
+  const [isImageLoading, setIsImageLoading] = useState(true);
+   
   const { text, imageUrl } = note;
+  
+  // Reset loading state when the image URL changes
+  useEffect(() => {
+    if (imageUrl) {
+      setIsImageLoading(true);
+    }
+  }, [imageUrl]);
 
   if (!text && !imageUrl) {
     return null;
@@ -32,10 +47,16 @@ export default function NoteModal({ note, onClose }) {
         <h3 className="text-lg font-bold text-blue-400 mb-3">Notes</h3>
         {imageUrl && (
           <div className="mb-4">
-            <img src={imageUrl} alt="Note illustration" className="rounded-lg max-w-full h-auto" />
+            {isImageLoading && <Spinner />}
+            <img 
+              src={imageUrl} 
+              alt="Note illustration" 
+              className={`rounded-lg max-w-full h-auto ${isImageLoading ? 'hidden' : 'block'}`}
+              onLoad={() => setIsImageLoading(false)}
+              onError={() => setIsImageLoading(false)} // Hide spinner even if image fails to load
+            />
           </div>
         )}
-
         {text && (
           <p className="text-sm leading-relaxed text-zinc-300 whitespace-pre-wrap">{text}</p>
         )}

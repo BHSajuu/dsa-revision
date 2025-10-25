@@ -13,18 +13,33 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
     nextReviewDate: "",
   });
   const [imageFile, setImageFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.problemName.trim() || !formData.leetcodeLink.trim()) {
       toast.error("Problem Name and Link are required.");
       return;
     }
-
-    onSave(formData, imageFile);
+    setIsSubmitting(true);
+   try {
+      await onSave(formData, imageFile);
+      // onSave will close the row, so we don't need to setIsSubmitting(false) on success
+    } catch (error) {
+      toast.error("Failed to save problem.");
+      setIsSubmitting(false); 
+    }
   };
 
   return (
     <tr className="border-b border-zinc-800 bg-blue-500/5">
+      {isSubmitting && (
+        <td colSpan="9" className="absolute inset-0 bg-zinc-900/80 flex items-center justify-center rounded-lg">
+           <div className="text-white flex items-center gap-2">
+            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-blue-400"></div>
+            Uploading...
+           </div>
+        </td>
+      )}
       <td className="px-4 py-3 text-zinc-400">{nextIndex}</td>
       <td className="px-4 py-3">
         <input
@@ -92,6 +107,7 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
         <div className="flex items-center justify-center gap-2">
           <button
             onClick={handleSubmit}
+            disabled={isSubmitting}
             className="p-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
             title="Save"
           >
@@ -101,6 +117,7 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
           </button>
           <button
             onClick={onCancel}
+            disabled={isSubmitting}
             className="p-2 bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors"
             title="Cancel"
           >
