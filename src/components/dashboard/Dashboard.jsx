@@ -10,6 +10,7 @@ import ReviewReminders from "../notifications/ReviewReminders";
 import { EditIcon, LogOutIcon, NotebookIcon, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import NoteModal from "../problems/NoteModal";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -21,7 +22,8 @@ export default function Dashboard() {
   const [editedPatternName, setEditedPatternName] = useState("");
   const [editedPatternNotes, setEditedPatternNotes] = useState("");
   const [editingPatternId, setEditingPatternId] = useState(null);
-
+  const [activeNote, setActiveNote] = useState(null);
+  
   const patterns = useQuery(
     api.patterns.getPatternsByUser,
     user?._id ? { userId: user._id } : "skip"
@@ -150,6 +152,14 @@ export default function Dashboard() {
       toast.error("Failed to update pattern");
     }
   };
+ 
+  const handleShowNote = (noteText) => {
+    setActiveNote(noteText);
+  };
+
+  const handleCloseNote = () => {
+    setActiveNote(null);
+  };
 
   // Memoize the filtered problems and patterns
   const filteredProblems = useMemo(() => {
@@ -188,6 +198,9 @@ export default function Dashboard() {
         <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-2000" />
       </div>
+      
+      <NoteModal note={activeNote} onClose={handleCloseNote} />
+
       <header className="w-[85%] ml-28 shadow-xl shadow-blue-200/20 hover:shadow-3xl hover:shadow-blue-300/30 rounded-4xl border border-zinc-800  sticky top-5 z-40 backdrop-blur-xl bg-linear-to-r from-blue-500/5 to-purple-500/5">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -249,6 +262,7 @@ export default function Dashboard() {
                   onAddProblem={handleAddProblem}
                   onUpdateProblem={handleUpdateProblem}
                   onDeleteProblem={handleDeleteProblem}
+                  onShowNote={handleShowNote}
                 />
                 <button
                   onClick={() => handleOpenNotes(pattern._id)}

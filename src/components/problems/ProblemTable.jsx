@@ -4,7 +4,7 @@ import { useState } from "react";
 import ProblemRow from "./ProblemRow";
 import AddProblemRow from "./AddProblemRow";
 
-export default function ProblemTable({ patternId, problems, onAddProblem, onUpdateProblem, onDeleteProblem }) {
+export default function ProblemTable({ patternId, problems, onAddProblem, onUpdateProblem, onDeleteProblem, onShowNote }) {
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAdd = async (problemData) => {
@@ -36,6 +36,7 @@ export default function ProblemTable({ patternId, problems, onAddProblem, onUpda
               index={index + 1}
               onUpdate={onUpdateProblem}
               onDelete={onDeleteProblem}
+              onShowNote={onShowNote}
             />
           ))}
           {isAdding ? (

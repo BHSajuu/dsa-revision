@@ -1,11 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import { motion } from "framer-motion";
+import {  useState } from "react";
 import PlatformIcon, { getPlatform, getPlatformHoverColor } from "./PlatformIcon";
 
-export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
+export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowNote }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
     problemName: problem.problemName,
@@ -17,9 +15,6 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
     successfulReviews: problem.successfulReviews || 0,
   });
 
-  const descRef = useRef(null);
-  const [showFullDesc, setShowFullDesc] = useState(false);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
 
   const handleSave = async () => {
     await onUpdate(problem._id, editData);
@@ -60,10 +55,10 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
     return problem.nextReviewDate === today;
   };
 
-  const handleDescriptionClick = (e) => {
-    const rect = (e.target).getBoundingClientRect();
-    setCoords({ x: rect.left, y: rect.top + window.scrollY });
-    setShowFullDesc(true);
+ const handleDescriptionClick = () => {
+    if (problem.notes && onShowNote) {
+      onShowNote(problem.notes);
+    }
   };
 
   if (isEditing) {
@@ -245,30 +240,6 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete }) {
           </div>
         </td>
       </tr>
-
-      {showFullDesc &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setShowFullDesc(false)}
-            ref={descRef}
-          >
-            <motion.div
-
-              className="absolute text-justify mx-3 hyphens-auto z-50 bg-zinc-900 text-white p-4 rounded-3xl border border-white/10 w-[450px] hover:cursor-pointer hover:shadow-xl hover:shadow-blue-300/30"
-              style={{
-                top: coords.y + 30,
-                left: coords.x,
-              }}
-              initial={{ scale: 0.2, opacity: 0.5 }}
-              animate={{ scale: 1.25, opacity: 1 }}
-              transition={{ type: "spring", duration: 1.2, bounce: 0.3 }}
-            >
-              <p className="text-sm leading-relaxed">{problem.notes}</p>
-            </motion.div>
-          </div>,
-          document.body
-        )}
     </>
   );
 }

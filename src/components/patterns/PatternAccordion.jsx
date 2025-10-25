@@ -3,7 +3,7 @@
 import { useState } from "react";
 import ProblemTable from "../problems/ProblemTable";
 
-export default function PatternAccordion({ pattern, problems, onAddProblem, onUpdateProblem, onDeleteProblem }) {
+export default function PatternAccordion({ pattern, problems, onAddProblem, onUpdateProblem, onDeleteProblem, onShowNote }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const totalProblems = problems.length;
@@ -64,6 +64,7 @@ export default function PatternAccordion({ pattern, problems, onAddProblem, onUp
             onAddProblem={onAddProblem}
             onUpdateProblem={onUpdateProblem}
             onDeleteProblem={onDeleteProblem}
+            onShowNote={onShowNote}
           />
         </div>
       </div>
