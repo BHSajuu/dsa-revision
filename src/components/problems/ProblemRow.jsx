@@ -73,11 +73,11 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
   if (isEditing) {
     return (
       <tr className=" border-b border-zinc-800 bg-zinc-800/30">
-        {isSubmitting && (
+        {isSubmitting && imageFile && (
           <td colSpan="9" className="absolute inset-0 bg-zinc-900/80 flex items-center justify-center rounded-lg">
             <div className="text-white flex items-center gap-2">
               <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-blue-400"></div>
-              Uploading...
+              Uploading Image...
             </div>
           </td>
         )}
@@ -110,20 +110,20 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
           />
         </td>
 
-        <td className=" py-3">
+        <td className="px-3 py-3">
           <input
             type="text"
             value={editData.notes}
             onChange={(e) =>
               setEditData({ ...editData, notes: e.target.value })
             }
-            className="w-28 px-1 py-1 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-36 px-1 py-1 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="file"
             accept="image/*"
             onChange={(e) => setImageFile(e.target.files[0])}
-            className="w-28 mt-2 text-xs text-zinc-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-zinc-700 file:text-zinc-300 hover:file:bg-zinc-600"
+            className="w-26 z-50 mt-2 text-xs text-zinc-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-zinc-700 file:text-zinc-300 hover:file:bg-zinc-600"
           />
         </td>
 
@@ -217,7 +217,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
           </a>
         </td>
         <td
-          className=" pt-6 text-zinc-300 text-sm line-clamp-1 cursor-pointer"
+          className="w-36 pt-6 px-3 text-zinc-300 text-sm line-clamp-1 cursor-pointer"
           onClick={handleDescriptionClick}
         >
           {problem.imageUrl && (
@@ -225,13 +225,13 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
           )}
           {problem.notes || (!problem.imageUrl && <span className="text-zinc-600">No notes</span>)}
         </td>
-        <td className="px-4 py-4 text-zinc-300 text-sm">
-          {problem.lastSolvedDate || <span className="text-zinc-600">Not solved yet</span>}
+        <td className=" px-2 py-4 text-zinc-300 text-sm">
+          {problem.lastSolvedDate || <span className="text-zinc-600 text-xs">Not solved yet</span>}
         </td>
         <td className={`px-4 py-4 text-sm font-medium ${isOverdue() ? "text-red-400" : isDueToday() ? "text-orange-400" : "text-zinc-300"}`}>
           {problem.nextReviewDate || <span className="text-zinc-600">Not scheduled</span>}
         </td>
-        <td className="px-4 py-4 text-center">
+        <td className=" py-4 text-center">
           <span className="inline-flex items-center justify-center w-8 h-8 bg-blue-500/20 text-blue-400 rounded-full font-semibold text-sm">
             {problem.successfulReviews}
           </span>

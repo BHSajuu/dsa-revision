@@ -1,6 +1,5 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { pattern } from "framer-motion/client";
 
 export default defineSchema({
   users: defineTable({

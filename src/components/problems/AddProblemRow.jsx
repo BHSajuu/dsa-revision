@@ -32,11 +32,11 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
 
   return (
     <tr className="border-b border-zinc-800 bg-blue-500/5">
-      {isSubmitting && (
+      {isSubmitting && imageFile && (
         <td colSpan="9" className="absolute inset-0 bg-zinc-900/80 flex items-center justify-center rounded-lg">
            <div className="text-white flex items-center gap-2">
             <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-blue-400"></div>
-            Uploading...
+            Uploading Image...
            </div>
         </td>
       )}
@@ -71,19 +71,19 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
           className="w-12 px-1 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
         />
       </td>
-      <td className=" py-3">
+      <td className="px-2 py-3">
         <input
           type="text"
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           placeholder="Notes"
-          className="w-28 px-1 py-1 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
+          className="w-36 px-1 py-1 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
         />
         <input
             type="file"
             accept="image/*"
             onChange={(e) => setImageFile(e.target.files[0])}
-            className="w-28 mt-2 text-xs text-zinc-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-zinc-700 file:text-zinc-300 hover:file:bg-zinc-600"
+            className="w-26 mt-2 text-xs text-zinc-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-zinc-700 file:text-zinc-300 hover:file:bg-zinc-600"
         />
       </td>
       <td className="px-4 py-3">

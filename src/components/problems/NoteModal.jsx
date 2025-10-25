@@ -33,11 +33,11 @@ export default function NoteModal({ note, onClose }) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center  "
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-auto max-h-screen  "
       onClick={onClose}
     >
       <motion.div
-        className="relative text-justify mx-4 hyphens-auto z-50 bg-zinc-900 text-white p-6 rounded-4xl border border-white/10 w-full max-w-xl shadow-xl shadow-blue-500/20"
+        className="max-w-2xl relative text-justify mx-4 hyphens-auto z-50 bg-zinc-900 text-white p-6 rounded-4xl border border-white/10   shadow-xl shadow-blue-500/20"
         onClick={(e) => e.stopPropagation()}
         initial={{ scale: 0.2, opacity: 0.5 }}
         animate={{ scale: 1.25, opacity: 1 }}
@@ -51,9 +51,9 @@ export default function NoteModal({ note, onClose }) {
             <img 
               src={imageUrl} 
               alt="Note illustration" 
-              className={`rounded-lg max-w-full h-auto ${isImageLoading ? 'hidden' : 'block'}`}
+              className={`rounded-lg  h-auto max-h-96  ${isImageLoading ? 'hidden' : 'block'}`}
               onLoad={() => setIsImageLoading(false)}
-              onError={() => setIsImageLoading(false)} // Hide spinner even if image fails to load
+              onError={() => setIsImageLoading(false)} 
             />
           </div>
         )}
