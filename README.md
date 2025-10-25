@@ -1,4 +1,5 @@
 <div align="center">
+  <img src="public/hero.png" alt="DSA Revision Tracker Hero Image" width="800" />
   <img src="public/logo.png" alt="DSA Revision Tracker Logo" width="150" height="150"/>
   <h1>DSA Revision Tracker</h1>
   <p>
