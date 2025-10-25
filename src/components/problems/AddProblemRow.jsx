@@ -43,7 +43,7 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
           onChange={(e) => setFormData({ ...formData, leetcodeLink: e.target.value })}
           placeholder="https://leetcode.com/..."
           className="w-12 px-1 py-2 bg-zinc-900 border border-zinc-700 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-         required
+          required
         />
       </td>
       <td className="px-3 py-3">
@@ -62,7 +62,7 @@ export default function AddProblemRow({ onSave, onCancel, nextIndex }) {
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           placeholder="Notes"
           className="w-28 px-1 py-1 bg-zinc-900 border border-zinc-700 rounded text-white text-sm"
-          
+
         />
       </td>
       <td className="px-4 py-3">

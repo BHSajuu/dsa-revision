@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "@/components/providers/ConvexClientProvider";
 import { AuthProvider } from "../contexts/AuthContext";
-import  { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +18,7 @@ export const metadata = {
   title: "DSA Revision Tracker",
   description: "Master Data Structures and Algorithms through pattern-based learning and spaced repetition",
   icons: {
-    icon: "logo.png", 
+    icon: "logo.png",
   },
 };
 
@@ -27,8 +27,17 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >  
-        <Toaster position="top-center" />
+      >
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            style: {
+              borderRadius: '30px',
+              background: '#E8F9FF',
+              color: '#000',
+            },
+          }}
+        />
         <ConvexClientProvider>
           <AuthProvider>{children}</AuthProvider>
         </ConvexClientProvider>

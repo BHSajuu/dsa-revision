@@ -47,7 +47,7 @@ export default function Dashboard() {
         name: newPatternName.trim(),
         userId: user._id,
         order: patterns?.length || 0,
-        patternNotes: patternNotes.trim() || null,
+        patternNotes: patternNotes.trim() || "",
       });
 
       setNewPatternName("");
@@ -68,7 +68,7 @@ export default function Dashboard() {
       });
       toast.success("Problem added successfully");
     } catch (error) {
-      toast.error("Failed to add problem");
+      toast("Failed to add problem");
     }
   };
 
@@ -115,7 +115,9 @@ export default function Dashboard() {
     if (pattern && pattern.patternNotes) {
       window.open(pattern.patternNotes, '_blank');
     } else {
-      toast.error("No notes available for this pattern");
+      toast('No notes available for this pattern', {
+        icon: '🙅‍♂️',
+      });
     }
   }
 
@@ -136,7 +138,7 @@ export default function Dashboard() {
       await updatePattern({
         patternId: editingPatternId,
         name: editedPatternName.trim(),
-        patternNotes: editedPatternNotes.trim() || null,
+        patternNotes: editedPatternNotes.trim() || "",
       });
 
       setEditedPatternName("");
