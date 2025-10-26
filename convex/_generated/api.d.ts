@@ -9,6 +9,7 @@
  */
 
 import type * as patterns from "../patterns.js";
+import type * as predefined from "../predefined.js";
 import type * as problems from "../problems.js";
 import type * as users from "../users.js";
 
@@ -28,6 +29,7 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   patterns: typeof patterns;
+  predefined: typeof predefined;
   problems: typeof problems;
   users: typeof users;
 }>;

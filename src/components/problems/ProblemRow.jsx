@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PlatformIcon, { getPlatform, getPlatformHoverColor } from "./PlatformIcon";
 
 export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowNote }) {
@@ -17,7 +17,19 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
 
   const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
+  
 
+  useEffect(() => {
+    let timer;
+    if (isSubmitting && imageFile) {
+      setUploadMessage("Uploading image");
+      timer = setTimeout(() => setUploadMessage("Updating question information"), 3600);
+    } else {
+      setUploadMessage("");
+    }
+    return () => clearTimeout(timer);
+  }, [isSubmitting, imageFile]);
 
   const handleSave = async () => {
     setIsSubmitting(true);
@@ -77,7 +89,7 @@ export default function ProblemRow({ problem, index, onUpdate, onDelete, onShowN
           <td colSpan="9" className="absolute inset-0 bg-zinc-900/80 flex items-center justify-center rounded-lg">
             <div className="text-white flex items-center gap-2">
               <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-blue-400"></div>
-              Uploading Image...
+              <span>{uploadMessage} <span className="animate-pulse text-gray-400 text-2xl">...</span></span>
             </div>
           </td>
         )}
