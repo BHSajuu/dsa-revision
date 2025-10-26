@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery} from "convex/react";
 import { api } from "../../convex/_generated/api";
 
 const AuthContext = createContext();
@@ -24,21 +24,15 @@ export const AuthProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("userEmail");
-    if (storedEmail) {
-      setEmail(storedEmail);
-    }
     setIsLoading(false);
   }, []);
 
   const login = (userEmail) => {
     setEmail(userEmail);
-    localStorage.setItem("userEmail", userEmail);
   };
 
   const logout = () => {
     setEmail(null);
-    localStorage.removeItem("userEmail");
   };
 
   const value = {
