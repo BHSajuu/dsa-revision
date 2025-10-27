@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery, useConvex } from "convex/react"; // Import useConvex
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -15,7 +15,7 @@ export default function LoginDialog({ isOpen, onClose }) {
 
   const { login } = useAuth();
   const createUser = useMutation(api.users.createUser);
-  const convex = useConvex(); // Get the Convex client
+  const User = useQuery(api.users.getUserByEmail, email ? { email } : "skip");
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
@@ -23,8 +23,7 @@ export default function LoginDialog({ isOpen, onClose }) {
     setIsSubmitting(true);
 
     try {
-      // Imperatively query for the user when the form is submitted
-      const userExists = await convex.query(api.users.getUserByEmail, { email });
+      const userExists = !!User;
 
       if (userExists) {
         login(email);
@@ -33,8 +32,7 @@ export default function LoginDialog({ isOpen, onClose }) {
         setStep(2);
       }
     } catch (err) {
-      // This will now catch actual errors during the query
-      setError("An error occurred. Please try again.");
+      setStep(2);
     } finally {
       setIsSubmitting(false);
     }
@@ -84,8 +82,8 @@ export default function LoginDialog({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl p-8 animate-slideUp">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-xs animate-fadeIn">
+      <div className="relative w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-4xl shadow-2xl shadow-blue-500/20 p-8 animate-slideUp">
         <button
           onClick={handleClose}
           className="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors"
@@ -111,7 +109,7 @@ export default function LoginDialog({ isOpen, onClose }) {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-3xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-full text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="you@example.com"
                 required
                 disabled={isSubmitting}
@@ -127,7 +125,7 @@ export default function LoginDialog({ isOpen, onClose }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="items-center ml-32 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="w-[70%] ml-15 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               {isSubmitting ? "Checking..." : "Continue"}
             </button>
@@ -148,7 +146,7 @@ export default function LoginDialog({ isOpen, onClose }) {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-3xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-full text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="John Doe"
                 required
                 disabled={isSubmitting}
@@ -164,7 +162,7 @@ export default function LoginDialog({ isOpen, onClose }) {
                 id="leetcode"
                 value={leetcodeLink}
                 onChange={(e) => setLeetcodeLink(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-3xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-full text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="https://leetcode.com/username"
                 disabled={isSubmitting}
               />
@@ -176,19 +174,19 @@ export default function LoginDialog({ isOpen, onClose }) {
               </div>
             )}
 
-            <div className="flex items-center justify-center mt-4 gap-3">
+            <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setStep(1)}
                 disabled={isSubmitting}
-                className="w-32 px-8 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-full transition-all disabled:opacity-50"
+                className="flex-1 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-full transition-all disabled:opacity-50"
               >
                 Back
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-38 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {isSubmitting ? "Creating..." : "Get Started"}
               </button>

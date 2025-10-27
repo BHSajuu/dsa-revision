@@ -33,14 +33,14 @@ export default function NoteModal({ note, onClose }) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-auto max-h-screen  "
+      className={`fixed inset-0 bg-black/40  z-50 overflow-y-auto flex ${imageUrl ? "items-start" : "items-center"}  justify-center py-8 max-h-[95vh]`}
       onClick={onClose}
     >
       <motion.div
-        className="max-w-2xl relative text-justify mx-4 hyphens-auto z-50 bg-zinc-900 text-white p-6 rounded-4xl border border-white/10   shadow-xl shadow-blue-500/20"
+        className="max-w-2xl relative text-justify mx-4  z-50 bg-zinc-900 text-white p-6 rounded-4xl border border-white/10   shadow-xl shadow-blue-500/20"
         onClick={(e) => e.stopPropagation()}
         initial={{ scale: 0.2, opacity: 0.5 }}
-        animate={{ scale: 1.25, opacity: 1 }}
+        animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ type: "spring", duration: 1.2, bounce: 0.3 }}
       >
